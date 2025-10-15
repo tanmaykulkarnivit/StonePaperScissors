@@ -4,7 +4,9 @@ import random
 choices = ["Rock", "Paper", "Scissors"]
 icons = {"Rock": "✊", "Paper": "✋", "Scissors": "✌️"}
 
-def play(user_choice, user_label, comp_label, result_label):
+score = {"wins": 0, "losses": 0, "ties": 0}
+
+def play(user_choice, user_label, comp_label, result_label, score_label):
     computer_choice = random.choice(choices)
 
     user_label.config(text=icons[user_choice], font=("Arial", 40))
@@ -12,21 +14,25 @@ def play(user_choice, user_label, comp_label, result_label):
 
     if user_choice == computer_choice:
         result = "It's a Tie!"
+        score["ties"] += 1
     elif (user_choice == "Rock" and computer_choice == "Scissors") or \
          (user_choice == "Paper" and computer_choice == "Rock") or \
          (user_choice == "Scissors" and computer_choice == "Paper"):
         result = "You Win!"
+        score["wins"] += 1
     else:
         result = "You Lose!"
+        score["losses"] += 1
 
     result_label.config(text=result, font=("Arial", 16, "bold"), fg="blue")
+    score_label.config(text=f"Wins: {score['wins']}  Losses: {score['losses']}  Ties: {score['ties']}")
 
 def game_window(start_screen):
     start_screen.destroy()
 
     game_root = tk.Tk()
     game_root.title("Rock Paper Scissors Game 🎮")
-    game_root.geometry("500x500")
+    game_root.geometry("500x550")
 
     tk.Label(game_root, text="Rock ✊ Paper ✋ Scissors ✌️", font=("Arial", 14)).pack(pady=10)
 
@@ -45,12 +51,15 @@ def game_window(start_screen):
     result_label = tk.Label(game_root, text="", font=("Arial", 14))
     result_label.pack(pady=20)
 
+    score_label = tk.Label(game_root, text="Wins: 0  Losses: 0  Ties: 0", font=("Arial", 12))
+    score_label.pack(pady=5)
+
     tk.Button(game_root, text="Rock ✊", width=15, height=2,
-              command=lambda: play("Rock", user_label, comp_label, result_label)).pack(pady=5)
+              command=lambda: play("Rock", user_label, comp_label, result_label, score_label)).pack(pady=5)
     tk.Button(game_root, text="Paper ✋", width=15, height=2,
-              command=lambda: play("Paper", user_label, comp_label, result_label)).pack(pady=5)
+              command=lambda: play("Paper", user_label, comp_label, result_label, score_label)).pack(pady=5)
     tk.Button(game_root, text="Scissors ✌️", width=15, height=2,
-              command=lambda: play("Scissors", user_label, comp_label, result_label)).pack(pady=5)
+              command=lambda: play("Scissors", user_label, comp_label, result_label, score_label)).pack(pady=5)
 
     game_root.mainloop()
 
